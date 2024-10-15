@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Table(navController: NavHostController) {
+fun Table(navController: NavHostController, appState: AppState) {
 
     val elements: List<List<String>> = listOf(
         listOf("H", "Li", "Na", "K", "Rb", "Cs", "Fr", "", ""),
@@ -51,67 +51,50 @@ fun Table(navController: NavHostController) {
     val fontSize = dimension + ((dimension - dimension / 2 * 5 / 3) / -2 * 6)
     val fontOffset = (dimension - dimension / 2 * 3 / 3) / -2
 
-    val expanded = remember { mutableStateOf(false) }
-    val filtriTemaOn = remember { mutableStateOf(false) }
-    val expandedFiltri = remember { mutableStateOf(false) }
+    //val expanded = remember { mutableStateOf(false) }
+    //val filtriTemaOn = remember { mutableStateOf(false) }
+    //val expandedFiltri = remember { mutableStateOf(false) }
 
     var isOpen by remember { mutableStateOf(false) }
-    var temiOn by remember { mutableStateOf(false) }
+    //var temiOn by remember { mutableStateOf(false) }
 
     val temi: List<String> = listOf("Default", "Ebollizione", "Elettronegatività", "Fusione", "SATP", "Densità", "Radioattivi")
     val filtri: List<String> = listOf("Metalli alcalini", "Metalli alcalino terrosi", "Metalli del blocco d", "Metalli del blocco p", "Non metalli", "Semimetalli", "Alogeni", "Gas nobili", "Lantanidi", "Attinidi")
     val tema = remember { mutableStateOf("Default") }
 
-    Window(onCloseRequest = { isOpen = false } ) {
-        MenuBar {
-            Menu("Azioni", mnemonic = 'A') {
-                Menu("Temi", mnemonic = 'T') {
-                    temi.forEach { theme ->
-                        Item(text = theme, onClick = { tema.value = theme })
-                    }
-                }
-                Menu("Filtri", mnemonic = 'F') {
-                    filtri.forEach { filter ->
-                        Item(text = filter, onClick = { tema.value = filter })
-                    }
-                }
-            }
-        }
-
-        Box(modifier = Modifier.padding(10.dp)) {
-            Row {
-                elements.forEach { i ->
-                    Column {
-                        i.forEach { j ->
-                            Box(modifier = Modifier
-                                .size(dimension)
-                                .padding(1.dp)
-                                .graphicsLayer {
-                                    shape = CustomShape()
-                                    clip = true
-                                }
-                                .background(color = getColor(tema.value, j))
-                                .drawBehind {
-                                    drawPath(
-                                        path = drawCustomPath(size = size),
-                                        color = if (j != "") Color.Blue else Color.Transparent,
-                                        style = Stroke(
-                                            width = 5f
-                                        )
-                                    )
-                                }
-                                .clickable(onClick = {
-                                    navController.navigate("Detail/$j")
-                                },
-                                    enabled = j != ""
-                                )
-                            ) {
-                                Text(
-                                    text = j,
-                                    fontSize = with(LocalDensity.current) { fontSize.toSp() },
-                                    modifier = Modifier.align(alignment = Alignment.Center).offset(fontOffset, fontOffset)
-                                    )
+    Box(modifier = Modifier.padding(10.dp)) {
+        Row {
+            elements.forEach { i ->
+                Column {
+                    i.forEach { j ->
+                        Box(modifier = Modifier
+                            .size(dimension)
+                            .padding(1.dp)
+                            .graphicsLayer {
+                                shape = CustomShape()
+                                clip = true
                             }
+                            .background(color = getColor(appState.filter, j))
+                            .drawBehind {
+                                drawPath(
+                                    path = drawCustomPath(size = size),
+                                    color = if (j != "") Color.Black else Color.Transparent,
+                                    style = Stroke(
+                                        width = 1f
+                                    )
+                                )
+                            }
+                            .clickable(onClick = {
+                                navController.navigate("Detail/$j")
+                            },
+                                enabled = j != ""
+                            )
+                        ) {
+                            Text(
+                                text = j,
+                                fontSize = with(LocalDensity.current) { fontSize.toSp() },
+                                modifier = Modifier.align(alignment = Alignment.Center).offset(fontOffset, fontOffset)
+                                )
                         }
                     }
                 }

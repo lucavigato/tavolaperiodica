@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.navigation.compose.composable
@@ -21,13 +22,18 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 @Preview
 fun app() {
+    val appState = remember { AppState() }
+
     val tabs = listOf(TabItem.NavTable, TabItem.NavCalcoli, TabItem.NavInfo)
+    val tabs2 = listOf(NavTable(appState), NavCalcoli(), NavInfo())
+    val titles = listOf("Tavola", "Calcoli", "Info")
     val tabNum = remember { mutableStateOf(0) }
 
     Scaffold(bottomBar = {
         TabRow(modifier = Modifier.background(Color.Gray), selectedTabIndex = tabNum.value) {
             tabs.forEachIndexed { index, tab ->
-                Tab(text = { Text(tab.title) }, selected = tabNum.value == index, onClick = { tabNum.value = index} )
+                //Tab(text = { Text(tab.title) }, selected = tabNum.value == index, onClick = { tabNum.value = index} )
+                Tab(text = {Text(titles[index]) }, selected = tabNum.value == index, onClick = { tabNum.value = index} )
             }
         }
     }, content = { padding ->
@@ -40,7 +46,27 @@ fun app() {
 }
 
 fun main() = application {
+
+    val appState = remember { AppState() }
+
+    val temi: List<String> = listOf("Default", "Ebollizione", "Elettronegatività", "Fusione", "SATP", "Densità", "Radioattivi")
+    val filtri: List<String> = listOf("Metalli alcalini", "Metalli alcalino terrosi", "Metalli del blocco d", "Metalli del blocco p", "Non metalli", "Semimetalli", "Alogeni", "Gas nobili", "Lantanidi", "Attinidi")
+
     Window(onCloseRequest = ::exitApplication, title = "Compose Demo") {
+        MenuBar {
+            Menu("Azioni", mnemonic = 'A') {
+                Menu("Temi", mnemonic = 'T') {
+                    temi.forEach { theme ->
+                        Item(text = theme, onClick = { appState.updateFilter(theme)})
+                    }
+                }
+                Menu("Filtri", mnemonic = 'F') {
+                    filtri.forEach { filter ->
+                        Item(text = filter, onClick = { appState.updateFilter(filter)})
+                    }
+                }
+            }
+        }
         app()
     }
 }
@@ -57,12 +83,12 @@ fun NavInfo() {
         composable("Detail/{name}") { backStackEntry ->
             Detail(backStackEntry.arguments?.getString("name").toString())
         }
-        composable("Info") { Info(navController) }
+        composable("Info") { app() } //Info(navController) }
     }
 }
 
 @Composable
-fun NavTable() {
+fun NavTable(appState: AppState) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Table") {
@@ -70,7 +96,7 @@ fun NavTable() {
         composable("Detail/{name}") { backStackEntry ->
             Detail(backStackEntry.arguments?.getString("name").toString())
         }
-        composable("Table") { Table(navController) }
+        composable("Table") { Table(navController, appState) }
     }
 }
 
@@ -81,7 +107,7 @@ fun NavCalcoli() {
 
     NavHost(navController = navController, startDestination = "Calcoli") {
         composable("Calcoli") { Calcoli(navController) } // Principale
-        composable("Elettronegatività") { Pauling() } // Elettronegatività
+        /*composable("Elettronegatività") { Pauling() } // Elettronegatività
         composable("Massa Molare") { Massa() } // Massa molare grafico
         composable("Testo") { Testo() } // Massa molare testo
         composable("Moli") { Moli() } // Moli
@@ -104,7 +130,8 @@ fun NavCalcoli() {
         composable("PH") { Ph() } // ph
         composable("PH Tampone") { Tampone() } // ph Tampone
         composable("Formula minima") { Formula() } // Formula minima
-        composable("Acid list") { Acid() } // Acid list
+        composable("Acid list") { Acid() } // Acid list\
+         */
     }
 }
 
