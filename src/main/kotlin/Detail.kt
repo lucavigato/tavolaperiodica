@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.LocalLocalization
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import kotlin.system.exitProcess
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -43,37 +45,44 @@ fun Detail(nome: String) {
     val screenWidth = configuration.containerSize.width.dp
     val buttonSize = (screenWidth - padding * 4) / 2
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxWidth()) {
-        Row(modifier = Modifier.padding(padding).fillMaxWidth().background(Color.LightGray, RoundedCornerShape(8.dp))) {
-            Box(modifier = Modifier
-                .size(dimension)
-                .graphicsLayer {
-                    shape = CustomShape()
-                    clip = true
-                }
-                .background(
-                    color = getColor(
-                        Elemento().classeIta(elements[index.intValue]),
-                        elements[index.intValue]
-                    )
-                )
-                .drawBehind {
-                    drawPath(
-                        path = drawCustomPath(size = size),
-                        color = Color.Black,
-                        style = Stroke(
-                            width = 5f
+    val isOpen = remember { mutableStateOf(false) }
+
+    //Window(onCloseRequest = { isOpen.value = true }, title = nome) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState()).fillMaxWidth()) {
+            Row(
+                modifier = Modifier.padding(padding).fillMaxWidth()
+                    .background(Color.LightGray, RoundedCornerShape(8.dp))
+            ) {
+                Box(modifier = Modifier
+                    .size(dimension)
+                    .graphicsLayer {
+                        shape = CustomShape()
+                        clip = true
+                    }
+                    .background(
+                        color = getColor(
+                            Elemento().classeIta(elements[index.intValue]),
+                            elements[index.intValue]
                         )
                     )
+                    .drawBehind {
+                        drawPath(
+                            path = drawCustomPath(size = size),
+                            color = Color.Black,
+                            style = Stroke(
+                                width = 5f
+                            )
+                        )
+                    }
+                ) {
+                    Text(
+                        text = elements[index.intValue],
+                        fontSize = with(LocalDensity.current) { fontSize.toSp() },
+                        modifier = Modifier.align(alignment = Alignment.Center)
+                            .offset(fontOffset, fontOffset)
+                    )
                 }
-            ) {
-                Text(
-                    text = elements[index.intValue],
-                    fontSize = with(LocalDensity.current) { fontSize.toSp() },
-                    modifier = Modifier.align(alignment = Alignment.Center)
-                        .offset(fontOffset, fontOffset)
-                )
             }
         }
-    }
+    //}
 }

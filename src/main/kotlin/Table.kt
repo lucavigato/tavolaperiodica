@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Table(navController: NavHostController, appState: AppState) {
+fun Table(navController: NavHostController) {
 
     val elements: List<List<String>> = listOf(
         listOf("H", "Li", "Na", "K", "Rb", "Cs", "Fr", "", ""),
@@ -74,7 +74,7 @@ fun Table(navController: NavHostController, appState: AppState) {
                                 shape = CustomShape()
                                 clip = true
                             }
-                            .background(color = getColor(appState.filter, j))
+                            .background(color = getColor(tema.value, j))
                             .drawBehind {
                                 drawPath(
                                     path = drawCustomPath(size = size),
