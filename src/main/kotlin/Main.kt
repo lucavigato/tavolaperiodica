@@ -42,6 +42,7 @@ fun main() = application {
 
     val temi: List<String> = listOf("Default", "Ebollizione", "Elettronegatività", "Fusione", "SATP", "Densità", "Radioattivi")
     val filtri: List<String> = listOf("Metalli alcalini", "Metalli alcalino terrosi", "Metalli del blocco d", "Metalli del blocco p", "Non metalli", "Semimetalli", "Alogeni", "Gas nobili", "Lantanidi", "Attinidi")
+    val conversioni: List<String> = listOf("Massa", "Lunghezza", "Pressione", "Energia", "Temperatura", "Volume")
 
     var tema by remember { mutableStateOf("Default") }
 
@@ -52,9 +53,9 @@ fun main() = application {
     var elementWindow by remember { mutableStateOf(false) }
 
     val obj: List<String> = listOf(
-        "Massa Molare", "Testo", "Elettronegatività", "Formula minima",
-        "Gas perfetti", "Conversioni", "Colligative", "Frazione Molare",
-        "Moli", "Molarità", "Molalità", "PH Tampone", "PH", "Acid list"
+        "Testo", "Elettronegatività", "Formula minima",
+        "Gas perfetti", "Innalzamento", "Abbassamento", "Pressione Osmotica", "Tensione di Vapore", "Frazione Molare",
+        "Moli", "Molarità", "Molalità", "PH Tampone", "PH", "Lista Acidi"
     )
 
     Window(
@@ -89,6 +90,14 @@ fun main() = application {
                 obj.forEach { calc ->
                     Item(text = calc, onClick = {
                         calcolo = calc
+                        newWindow = true
+                    })
+                }
+            }
+            Menu("Conversioni", mnemonic = 'V') {
+                conversioni.forEach { conv ->
+                    Item(text = conv, onClick = {
+                        calcolo = conv
                         newWindow = true
                     })
                 }
@@ -143,15 +152,28 @@ fun main() = application {
                 title = calcolo
             ) {
                 when (calcolo) {
-                    "Testo" -> Detail("I")
-                    "Conversioni" -> Detail("Co")
-                    else -> Column {
-                        Text(text = "dimension = $dimension")
-                        Text(text = "window height = $windowHeight")
-                        Text(text = "screen height = ${screenSize.height.dp}")
-                        Text(text = "font size = $fontSize")
-                        Text(text = "font offset = $fontOffset")
-                    }
+                    "Testo" -> Testo()
+                    "Elettronegatività" -> Pauling()
+                    "Formula minima" -> Formula()
+                    "Massa" -> ConvMass()
+                    "Lunghezza" -> ConvLength()
+                    "Pressione" -> ConvPress()
+                    "Energia" -> ConvEnergy()
+                    "Temperatura" -> ConvTemp()
+                    "Volume" -> ConvVol()
+                    "Gas perfetti" -> Gas()
+                    "Innalzamento" -> Innalzamento()
+                    "Abbassamento" -> Abbassamento()
+                    "Pressione Osmotica" -> Osmotica()
+                    "Tensione di Vapore" -> Tensione()
+                    "Frazione Molare" -> Frazione()
+                    "Moli" -> Moli()
+                    "Molarità" -> Molarity()
+                    "Molalità" -> Molality()
+                    "PH Tampone" -> Tampone()
+                    "PH" -> Ph()
+                    "Lista Acidi" -> Acid()
+                    else -> Testo()
                 }
             }
         }
