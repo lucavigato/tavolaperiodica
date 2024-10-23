@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -105,19 +106,19 @@ fun ConvMass() {
                 }
             }
         }
-        Row(
-            modifier = Modifier.padding(vertical = padding)
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = resultMassa(
-                    entry1.value,
-                    entry2.value,
-                    input.value.text.toDoubleOrNull()
-                ).toString(), modifier = Modifier.padding(horizontal = padding)
-            )
-            Text(text = entry2.value)
-            Spacer(modifier = Modifier.weight(1f))
+        Box(contentAlignment = Alignment.Center) {
+            Row(
+                modifier = Modifier.padding(vertical = padding)
+            ) {
+                Text(
+                    text = resultMassa(
+                        entry1.value,
+                        entry2.value,
+                        input.value.text.toDoubleOrNull()
+                    ).toString(), modifier = Modifier.padding(horizontal = padding)
+                )
+                Text(text = entry2.value)
+            }
         }
 
         // TODO: add the inverse formulas
@@ -212,21 +213,15 @@ fun ConvLength() {
                 }
             }
         }
-        Row(
-            modifier = Modifier.padding(vertical = padding)
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
+        Box(modifier = Modifier.padding(vertical = padding), contentAlignment = Alignment.Center) {
             Text(
-                text = resultLength(
+                text = "${resultLength(
                     entry1.value,
                     entry2.value,
                     input.value.text.toDoubleOrNull()
-                ).toString(), modifier = Modifier.padding(horizontal = padding)
+                )} ${entry2.value}", modifier = Modifier.padding(horizontal = padding)
             )
-            Text(text = entry2.value)
-            Spacer(modifier = Modifier.weight(1f))
         }
-        // TODO: add the formulas to convert
     }
 }
 
@@ -625,20 +620,20 @@ fun ConvEnergy() {
             }
         }
 
-        Row(
-            modifier = Modifier.padding(vertical = padding)
-                .fillMaxWidth()
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = resultEnergy(
-                    entry1.value,
-                    entry2.value,
-                    input.value.text.toDoubleOrNull()
-                ).toString(), modifier = Modifier.padding(horizontal = padding)
-            )
-            Text(text = entry2.value)
-            Spacer(modifier = Modifier.weight(1f))
+        Box (contentAlignment = Alignment.Center) {
+            Row(
+                modifier = Modifier.padding(vertical = padding)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = resultEnergy(
+                        entry1.value,
+                        entry2.value,
+                        input.value.text.toDoubleOrNull()
+                    ).toString(), modifier = Modifier.padding(horizontal = padding)
+                )
+                Text(text = entry2.value)
+            }
         }
         // TODO: add the formulas to convert
     }
